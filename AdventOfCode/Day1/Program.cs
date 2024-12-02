@@ -1,62 +1,81 @@
-﻿string filePath = "C:\\Users\\Alexandre\\Documents\\Developpement\\AdventOfCode\\AdventOfCode\\Day1\\input.txt";
+﻿
+using System.Reflection;
 
-Console.WriteLine(CalculDistanceEntreColonnes(filePath));
-Console.WriteLine(CalculSimilariteColonnes(filePath));
+namespace MyNamespace;
 
-static int CalculDistanceEntreColonnes(string filePath)
+public class Day1
 {
-    var (left, right) = GetColumns(filePath);
+	const string FILEPATH = "Day1\\input.txt";
 
-    left.Sort();
-    right.Sort();
+	public Day1()
+	{
 
-    int distance = 0;
-    for (int i = 0; i < left.Count; i++)
-    {
-        int difference = left[i] - right[i];
-        if (difference < 0)
-            difference = -difference;
-        distance += difference;
-    }
+		Console.WriteLine(CalculDistanceEntreColonnes());
+		Console.WriteLine(CalculSimilariteColonnes());
+	}
 
-    return distance;
-}
+	private static int CalculDistanceEntreColonnes()
+	{
+		var (left, right) = GetColumns();
 
+		left.Sort();
+		right.Sort();
 
-static int CalculSimilariteColonnes(string filePath)
-{
-    var (left, right) = GetColumns(filePath);
+		int distance = 0;
+		for (int i = 0; i < left.Count; i++)
+		{
+			int difference = left[i] - right[i];
+			if (difference < 0)
+				difference = -difference;
+			distance += difference;
+		}
 
-    Dictionary<int, int> rightCounts = [];
+		return distance;
+	}
 
-    foreach (var num in right)
-    {
-        if (rightCounts.TryGetValue(num, out int value))
-            rightCounts[num] = ++value;
-        else
-            rightCounts[num] = 1;
-    }
+	private static int CalculSimilariteColonnes()
+	{
+		var (left, right) = GetColumns();
 
-    int similarity = 0;
+		Dictionary<int, int> rightCounts = [];
 
-    foreach (var leftNum in left)
-        if (rightCounts.TryGetValue(leftNum, out int value))
-            similarity += leftNum * value;
+		foreach (var num in right)
+		{
+			if (rightCounts.TryGetValue(num, out int value))
+				rightCounts[num] = ++value;
+			else
+				rightCounts[num] = 1;
+		}
 
-    return similarity;
-}
+		int similarity = 0;
 
-static (List<int> left, List<int> right) GetColumns(string filePath)
-{
-    List<int> left = [];
-    List<int> right = [];
+		foreach (var leftNum in left)
+			if (rightCounts.TryGetValue(leftNum, out int value))
+				similarity += leftNum * value;
 
-    foreach (var line in File.ReadLines(filePath))
-    {
-        var numbers = line.Split("  ");
-        left.Add(int.Parse(numbers[0]));
-        right.Add(int.Parse(numbers[1]));
-    }
+		return similarity;
+	}
 
-    return (left, right);
+	private static (List<int> left, List<int> right) GetColumns()
+	{
+		List<int> left = [];
+		List<int> right = [];
+
+		if (File.Exists(Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName, FILEPATH)))
+		{
+
+			foreach (var line in File.ReadLines(Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName, FILEPATH)))
+			{
+				var numbers = line.Split("  ");
+				left.Add(int.Parse(numbers[0]));
+				right.Add(int.Parse(numbers[1]));
+			}
+
+			return (left, right);
+		}
+		else
+		{
+			throw new Exception("Le fichier n'existe pas.");
+		}
+	}
 }
