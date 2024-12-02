@@ -1,4 +1,3 @@
-﻿using MyNamespace;
+﻿using AdventOfCode.Day3;
 
-//Day1 day = new();
-Day2 day = new();
+Day3 day = new();
