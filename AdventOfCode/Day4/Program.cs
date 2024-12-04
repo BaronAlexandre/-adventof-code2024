@@ -80,16 +80,8 @@ public class Day4
         var bottomRightLetter = text[row + 1][col + 1];
 
         // Check les lettres sont M ou S
-        return ((topLeftLetter == 'M' || topLeftLetter == 'S')
-            && (topRightLetter == 'M' || topRightLetter == 'S')
-            && (bottomLeftLetter == 'M' || bottomLeftLetter == 'S')
-            && (bottomRightLetter == 'M' || bottomRightLetter == 'S')
-            &&
-            (
-                // Check des SAM OU MAS
-                (topLeftLetter == bottomLeftLetter && topRightLetter == bottomRightLetter && topLeftLetter != topRightLetter) ||
-                (topLeftLetter == topRightLetter && bottomLeftLetter == bottomRightLetter && bottomLeftLetter != topLeftLetter)
-            ));
+        return (($"{topLeftLetter}A{bottomRightLetter}" == "MAS" || $"{topLeftLetter}A{bottomRightLetter}" == "SAM")
+            && ($"{topRightLetter}A{bottomLeftLetter}" == "MAS" || $"{topRightLetter}A{bottomLeftLetter}" == "SAM"));
     }
 
     private static List<List<char>> GetArray()
