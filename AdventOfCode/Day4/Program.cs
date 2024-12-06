@@ -6,7 +6,7 @@ public class Day4
 
     public Day4()
     {
-        Console.WriteLine("GetX_MAS()");
+        Console.WriteLine(GetX_MAS());
     }
 
     private static int GetX_MAS()

@@ -1,3 +1,3 @@
-﻿using AdventOfCode.Day5;
+﻿using AdventOfCode.Day6;
 
-Day5 day = new();
+Day6 day = new();
