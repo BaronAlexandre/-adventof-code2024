@@ -1,3 +1,7 @@
-﻿using AdventOfCode.Day7;
+﻿Console.WriteLine("Quel jour ?");
+var input = Console.ReadLine();
 
-Day7 day = new();
+string className = $"AdventOfCode.Day{input}.Day{input}";
+
+Activator.CreateInstance(Type.GetType(className));
+
