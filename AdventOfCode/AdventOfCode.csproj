@@ -10,7 +10,6 @@
   <ItemGroup>
     <Folder Include="Day1\" />
     <Folder Include="Day6\" />
-    <Folder Include="Day8\" />
     <Folder Include="Day9\" />
     <Folder Include="Day10\" />
     <Folder Include="Day11\" />
