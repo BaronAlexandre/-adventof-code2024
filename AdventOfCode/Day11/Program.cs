@@ -1,7 +1,4 @@
-﻿using static System.Formats.Asn1.AsnWriter;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-
-namespace AdventOfCode.Day11;
+﻿namespace AdventOfCode.Day11;
 
 public class Day11
 {
@@ -10,61 +7,84 @@ public class Day11
     public Day11()
     {
 
-        Console.WriteLine(CalculDistanceEntreColonnes(GetColumns()));
+        Console.WriteLine(GetBlinks(GetStones(), 25));
+        Console.WriteLine(GetBlinks(GetStones(), 75));
     }
 
-    private static int CalculDistanceEntreColonnes(string line)
+    private static decimal GetBlinks(string line, int nbblinks)
     {
-		var ints = line.Split(' ').Select(ulong.Parse).ToList();
+        var ints = line.Split(' ').Select(ulong.Parse).ToList();
 
-		List<ulong> transformedStones = ints;
+        Dictionary<ulong, ulong> transformedStones = ints.GroupBy(i => i).ToDictionary(i => i.Key, i => (ulong)i.Count());
 
 
-		for (int i = 0; i < 75; i++)
-		{
-			transformedStones = Blink(transformedStones);
-		}
+        for (int i = 0; i < nbblinks; i++)
+        {
+            transformedStones = Blink(transformedStones);
+        }
 
-		return transformedStones.Count();
+        ulong r = 0;
+        foreach (var kvp in transformedStones)
+        {
+            r += kvp.Value;
+        }
+
+        return r;
     }
-	static List<ulong> Blink(List<ulong> stones)
-	{
-		List<ulong> result = [];
+    static Dictionary<ulong, ulong> Blink(Dictionary<ulong, ulong> stones)
+    {
+        Dictionary<ulong, ulong> result = [];
 
-		foreach (var stone in stones)
-		{
-			try
-			{
-				if (stone == 0)
-				{
-					result.Add(1);
-				}
-				else if (stone >= 1 && stone < 10)
-				{
-					result.Add(stone * (ulong)2024);
-				}
-				else if (stone.ToString().Count() % 2 == 0)
-				{
-					string firstPart = stone.ToString().Substring(0, stone.ToString().Length / 2);
-					string secondPart = stone.ToString().Substring(stone.ToString().Length / 2);
+        foreach (var stone in stones)
+        {
+            try
+            {
+                if (stone.Key == 0)
+                {
+                    if (result.ContainsKey(1))
+                        result[1] += stone.Value;
+                    else
+                        result[1] = stone.Value;
+                }
+                else if (stone.Key >= 1 && stone.Key < 10)
+                {
+                    if (result.ContainsKey(stone.Key * 2024))
+                        result[stone.Key * 2024] += stone.Value;
+                    else
+                        result[stone.Key * 2024] = stone.Value;
+                }
+                else if (stone.Key.ToString().Count() % 2 == 0)
+                {
+                    var part1 = ulong.Parse(stone.Key.ToString().Substring(0, stone.Key.ToString().Length / 2));
+                    var part2 = ulong.Parse(stone.Key.ToString().Substring(stone.Key.ToString().Length / 2));
 
-					result.Add(ulong.Parse(firstPart));
-					result.Add(ulong.Parse(secondPart));
-				}
-				else
-				{
-					result.Add(stone * 2024);
-				}
-			}
-			catch(Exception e)
-			{
+                    if (result.ContainsKey(part1))
+                        result[part1] += stone.Value;
+                    else
+                        result[part1] = stone.Value;
 
-			}
-		}
+                    if (result.ContainsKey(part2))
+                        result[part2] += stone.Value;
+                    else
+                        result[part2] = stone.Value;
+                }
+                else
+                {
+                    if (result.ContainsKey(stone.Key * 2024))
+                        result[stone.Key * 2024] += stone.Value;
+                    else
+                        result[stone.Key * 2024] = stone.Value;
+                }
+            }
+            catch (Exception e)
+            {
 
-		return result;
-	}
-	private static string GetColumns()
+            }
+        }
+
+        return result;
+    }
+    private static string GetStones()
     {
         if (File.Exists(Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName, FILEPATH)))
         {
