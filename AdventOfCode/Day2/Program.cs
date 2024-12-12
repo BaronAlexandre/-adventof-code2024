@@ -32,7 +32,7 @@ public class Day2
                 safereports++;
             else
             {
-                for (int i = 0; i < report.Count; i++)
+                for (var i = 0; i < report.Count; i++)
                 {
                     var modifiedReport = new List<int>(report);
                     modifiedReport.RemoveAt(i);
@@ -50,7 +50,7 @@ public class Day2
 
     private static bool IsSafe(List<int> report)
     {
-        for (int i = 1; i < report.Count; i++)
+        for (var i = 1; i < report.Count; i++)
             if (!(Math.Abs(report[i] - report[i - 1]) < 4 && Math.Abs(report[i] - report[i - 1]) > 0 && report[i] > report[i - 1] != report[0] > report[1]))
                 return false;
 

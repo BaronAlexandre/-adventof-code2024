@@ -19,7 +19,7 @@ public class Day1
         right.Sort();
 
         int distance = 0;
-        for (int i = 0; i < left.Count; i++)
+        for (var i = 0; i < left.Count; i++)
         {
             int difference = left[i] - right[i];
             if (difference < 0)

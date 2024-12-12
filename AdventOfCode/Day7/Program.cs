@@ -42,7 +42,7 @@ public class Day7
             var result = numbers[0];
             bool valid = true;
 
-            for (int i = 1; i < numbers.Count; i++)
+            for (var i = 1; i < numbers.Count; i++)
             {
                 result = Calcul(result, numbers[i], ops[i - 1]);
                 // Si res dépassé on skip
@@ -71,11 +71,11 @@ public class Day7
         var combins = (int)Math.Pow(operators.Length, numOperators);
         var combinations = new string[combins];
 
-        for (int i = 0; i < combins; i++)
+        for (var i = 0; i < combins; i++)
         {
             char[] combin = new char[numOperators];
 
-            for (int j = 0; j < numOperators; j++)
+            for (var j = 0; j < numOperators; j++)
             {
                 combin[j] = operators[(i / (int)Math.Pow(operators.Length, numOperators - j - 1)) % operators.Length];
             }

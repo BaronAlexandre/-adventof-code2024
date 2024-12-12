@@ -17,7 +17,7 @@ public class Day9
 
         foreach (var num in ints)
         {
-            for (int i = 0; i < num; i++)
+            for (var i = 0; i < num; i++)
             {
                 finalmap.Add(isBlock ? id.ToString() : ".");
             }
@@ -61,7 +61,7 @@ public class Day9
         var diskValues = ints.ToArray();
 
         var diskCapacities = new List<int>[totalLength / 2];
-        for (int i = 0; i < totalLength / 2; i++)
+        for (var i = 0; i < totalLength / 2; i++)
             diskCapacities[i] = [];
 
         for (int diskIndex = totalLength - 1; diskIndex > 0; diskIndex -= 2)
@@ -75,14 +75,14 @@ public class Day9
                 }
 
         int spaceCounter = 0;
-        for (int index = 0; index < totalLength; index++)
+        for (var index = 0; index < totalLength; index++)
         {
             if (index % 2 != 0)
             {
                 foreach (var diskIndex in diskCapacities[index / 2])
                 {
                     var diskSpace = ints[diskIndex];
-                    for (int k = 0; k < diskSpace; k++)
+                    for (var k = 0; k < diskSpace; k++)
                         totalValue += (diskIndex / 2) * spaceCounter++;
                 }
                 spaceCounter += diskValues[index];
@@ -93,7 +93,7 @@ public class Day9
                 if (diskValues[index] == -1)
                     spaceCounter += diskSpace;
                 else
-                    for (int k = 0; k < diskSpace; k++)
+                    for (var k = 0; k < diskSpace; k++)
                         totalValue += (index / 2) * spaceCounter++;
             }
         }

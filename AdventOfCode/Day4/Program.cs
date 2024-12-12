@@ -15,8 +15,8 @@ public class Day4
 
         var result = 0;
 
-        for (int i = 1; i < text.Count - 1; i++)
-            for (int j = 1; j < text[i].Count - 1; j++)
+        for (var i = 1; i < text.Count - 1; i++)
+            for (var j = 1; j < text[i].Count - 1; j++)
                 if (text[i][j] == 'A' && FindX_MAS(text, i, j)) result++;
 
         return result;

@@ -18,7 +18,7 @@ public class Day11
         Dictionary<ulong, ulong> transformedStones = ints.GroupBy(i => i).ToDictionary(i => i.Key, i => (ulong)i.Count());
 
 
-        for (int i = 0; i < nbblinks; i++)
+        for (var i = 0; i < nbblinks; i++)
         {
             transformedStones = Blink(transformedStones);
         }

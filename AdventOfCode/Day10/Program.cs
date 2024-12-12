@@ -15,13 +15,12 @@ public class Day10
         int totalScore2 = 0;
 
         // Parcours de chaque cellule de la carte
-        for (int i = 0; i < map.Length; i++)
+        for (var i = 0; i < map.Length; i++)
         {
-            for (int j = 0; j < map[0].Length; j++)
+            for (var j = 0; j < map[0].Length; j++)
             {
                 if (map[i][j] == '0')
                 {
-
                     totalScore1 += CountNb9FriomStarting(map, i, j);
                     totalScore2 += CountDistinctHiking(map, i, j);
                 }
@@ -57,7 +56,7 @@ public class Day10
             else
             {
                 // Pour chaque direction
-                for (int i = 0; i < 4; i++)
+                for (var i = 0; i < 4; i++)
                 {
                     int voisinX = x + dx[i];
                     int voisinY = y + dy[i];

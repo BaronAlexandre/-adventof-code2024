@@ -3,103 +3,134 @@
 public class Day12
 {
     const string FILEPATH = "Day12\\input.txt";
-	static int rows, cols;
-	static char[,] map;
-	static bool[,] visited;
-
-	public Day12()
+    public Day12()
     {
+        Console.WriteLine(GetFences(GetMap()).Item1);
+        Console.WriteLine(GetFences(GetMap()).Item2);
+    }
+    private static (int, int) GetFences(string[] map)
+    {
+        var visited = new bool[map.Length, map[0].Length];
 
-        Console.WriteLine(GetFences(GetMap()));
+        int totalPrice = 0;
+        int totalPrice2 = 0;
+
+        for (var i = 0; i < map.Length; i++)
+        {
+            for (var j = 0; j < map[0].Length; j++)
+            {
+                if (!visited[i, j])
+                {
+                    var region = GetPlantsAndPerimeter(i, j, map, visited);
+                    totalPrice += region.Item1 * region.Item2;
+                    region.Item3.Sort();
+                    totalPrice2 += region.Item1 * GetUniqueSidesCount(region.Item3);
+                }
+            }
+        }
+        return (totalPrice, totalPrice2);
     }
 
-    private static decimal GetFences(string[] input)
+    static (int, int, List<string>) GetPlantsAndPerimeter(int x, int y, string[] map, bool[,] visited)
     {
-		rows = input.Length;
-		cols = input[0].Length;
+        var result = (area: 0, perimeter: 0, sides: new List<string>());
 
-		map = new char[rows, cols];
-		visited = new bool[rows, cols];
+        var queue = new Queue<(int x, int y)>();
+        queue.Enqueue((x, y));
 
-		for (int i = 0; i < rows; i++)
-		{
-			for (int j = 0; j < cols; j++)
-			{
-				map[i, j] = input[i][j];
-			}
-		}
+        while (queue.Count > 0)
+        {
+            var current = queue.Dequeue();
+            x = current.x;
+            y = current.y;
 
-		int totalPrice = 0;
+            if (visited[x, y]) continue;
 
-		for (int i = 0; i < rows; i++)
-		{
-			for (int j = 0; j < cols; j++)
-			{
-				if (!visited[i, j])
-				{
-					var region = FloodFill(i, j);
-					int area = region.Item1;
-					int perimeter = region.Item2;
-					totalPrice += area * perimeter;
-				}
-			}
-		}
-		return totalPrice;
+            visited[x, y] = true;
+
+            // Gauche
+            if (y - 1 < 0 || map[x][y - 1] != map[x][y])
+            {
+                result.perimeter += 1;
+                result.sides.Add($"l{y.ToString().PadLeft(map[0].Length, '0')},{x.ToString().PadLeft(map.Length, '0')}");
+            }
+            else if (!visited[x, y - 1])
+            {
+                queue.Enqueue((x, y - 1));
+            }
+
+            // Bas
+            if (x + 1 >= map.Length || map[x + 1][y] != map[x][y])
+            {
+                result.perimeter += 1;
+                result.sides.Add($"d{x.ToString().PadLeft(map.Length, '0')},{y.ToString().PadLeft(map[0].Length, '0')}");
+            }
+            else if (!visited[x + 1, y])
+            {
+                queue.Enqueue((x + 1, y));
+            }
+
+            // Droite
+            if (y + 1 >= map[x].Length || map[x][y + 1] != map[x][y])
+            {
+                result.perimeter += 1;
+                result.sides.Add($"r{y.ToString().PadLeft(map[0].Length, '0')},{x.ToString().PadLeft(map.Length, '0')}");
+            }
+            else if (!visited[x, y + 1])
+            {
+                queue.Enqueue((x, y + 1));
+            }
+
+            // Haut
+            if (x - 1 < 0 || map[x - 1][y] != map[x][y])
+            {
+                result.perimeter += 1;
+                result.sides.Add($"u{x.ToString().PadLeft(map.Length, '0')},{y.ToString().PadLeft(map[0].Length, '0')}");
+            }
+            else if (!visited[x - 1, y])
+            {
+                queue.Enqueue((x - 1, y));
+            }
+
+            result.area += 1;
+        }
+
+        return result;
     }
-	static Tuple<int, int> FloodFill(int x, int y)
-	{
-		int[] dx = [-1, 1, 0, 0];
-		int[] dy = [0, 0, -1, 1];
 
-		char plantType = map[x, y];
-		int area = 0;
-		int perimeter = 0;
+    static int GetUniqueSidesCount(List<string> sides)
+    {
+        var count = 1;
+        var prevElement = sides[0];
+        for (int i = 1; i < sides.Count; i++)
+        {
+            var prevParts = prevElement.Split(",");
+            var currParts = sides[i].Split(",");
+            prevElement = sides[i];
+            if (currParts[0] == prevParts[0] && int.Parse(currParts[1]) - int.Parse(prevParts[1]) == 1) continue;
+            count++;
+        }
+        return count;
+    }
 
-		Stack<Tuple<int, int>> stack = new Stack<Tuple<int, int>>();
-		stack.Push(Tuple.Create(x, y));
-		visited[x, y] = true;
 
-		while (stack.Count > 0)
-		{
-			var current = stack.Pop();
-			int cx = current.Item1, cy = current.Item2;
-			area++;
+    private static string[] GetMap()
+    {
+        List<string> map = [];
 
-			for (int i = 0; i < 4; i++)
-			{
-				int nx = cx + dx[i], ny = cy + dy[i];
+        if (File.Exists(Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName, FILEPATH)))
+        {
 
-				if (nx < 0 || ny < 0 || nx >= rows || ny >= cols || map[nx, ny] != plantType)
-				{
-					perimeter++;
-				}
-				else if (!visited[nx, ny]) 
-				{
-					visited[nx, ny] = true;
-					stack.Push(Tuple.Create(nx, ny));
-				}
-			}
-		}
+            foreach (var line in File.ReadLines(Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName, FILEPATH)))
+            {
+                map.Add(line.Trim());
+            }
 
-		return Tuple.Create(area, perimeter);
-	}
-	private static string[] GetMap()
-	{
-		List<string> map = [];
-
-		if (File.Exists(Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName, FILEPATH)))
-		{
-
-			foreach (var line in File.ReadLines(Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName, FILEPATH)))
-			{
-				map.Add(line.Trim());
-			}
-
-			return map.ToArray();
-		}
-		else
-		{
-			throw new Exception("Le fichier n'existe pas.");
-		}
-	}
+            return map.ToArray();
+        }
+        else
+        {
+            throw new Exception("Le fichier n'existe pas.");
+        }
+    }
 }

@@ -16,10 +16,10 @@
             {
                 var coord = antenna.Value;
 
-                for (int i = 0; i < coord.Count; i++)
+                for (var i = 0; i < coord.Count; i++)
                 {
                     var antenna1 = coord[i];
-                    for (int j = i + 1; j < coord.Count; j++)
+                    for (var j = i + 1; j < coord.Count; j++)
                     {
                         var antenna2 = coord[j];
 
