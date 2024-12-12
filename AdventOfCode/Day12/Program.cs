@@ -52,7 +52,7 @@ public class Day12
             if (y - 1 < 0 || map[x][y - 1] != map[x][y])
             {
                 result.perimeter += 1;
-                result.sides.Add($"l{y},{x}");
+                result.sides.Add($"l{y.ToString().PadLeft(map[0].Length, '0')},{x.ToString().PadLeft(map.Length, '0')}");
             }
             else if (!visited[x, y - 1])
             {
@@ -63,7 +63,7 @@ public class Day12
             if (x + 1 >= map.Length || map[x + 1][y] != map[x][y])
             {
                 result.perimeter += 1;
-                result.sides.Add($"d{x},{y}");
+                result.sides.Add($"d{x.ToString().PadLeft(map.Length, '0')},{y.ToString().PadLeft(map[0].Length, '0')}");
             }
             else if (!visited[x + 1, y])
             {
@@ -74,7 +74,7 @@ public class Day12
             if (y + 1 >= map[x].Length || map[x][y + 1] != map[x][y])
             {
                 result.perimeter += 1;
-                result.sides.Add($"r{y},{x}");
+                result.sides.Add($"r{y.ToString().PadLeft(map[0].Length, '0')},{x.ToString().PadLeft(map.Length, '0')}");
             }
             else if (!visited[x, y + 1])
             {
@@ -85,7 +85,7 @@ public class Day12
             if (x - 1 < 0 || map[x - 1][y] != map[x][y])
             {
                 result.perimeter += 1;
-                result.sides.Add($"u{x},{y}");
+                result.sides.Add($"u{x.ToString().PadLeft(map.Length, '0')},{y.ToString().PadLeft(map[0].Length, '0')}");
             }
             else if (!visited[x - 1, y])
             {
