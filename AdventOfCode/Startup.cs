@@ -1,4 +1,4 @@
-int day = 12;
+int day = DateTime.Now.Day;
 
 if (DateTime.Now.Month != 12)
 {
